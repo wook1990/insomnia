@@ -20,7 +20,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-kg6&mv%bw8twa=@xeb)lg9tapjmg$o3gwak23mz*-xdcqu293m'
+import os
+import json
+from django.core.exceptions import ImproperlyConfigured
+
+BASE_DIR = "C:/Users/WAI/OneDrive/03.WORKSPACE/99.WEB/secure"
+
+secret_file = os.path.join(BASE_DIR, "secret.json")
+
+with open(secret_file) as f:
+    secrets = json.load(f.read())
+
+def get_secret(setting, secrets=secrets):
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = "Set the {} enviroment Variable".format(stting)
+        raise ImproperlyConfigured(error_msg)
+
+SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
